@@ -1,2 +1,2 @@
-GET http://projet4/admin/jsonGetStats/
+GET http://p4.fr/admin/jsonGetStats/
 Content-Type: application/json

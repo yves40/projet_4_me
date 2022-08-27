@@ -1,4 +1,4 @@
-POST http://projet4/billets/jsonDeleteBillet
+POST http://p4.fr/billets/jsonDeleteBillet
 Content-Type: application/json
 
 {

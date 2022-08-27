@@ -1,4 +1,4 @@
-POST http://projet4/billets/jsonPostUpdateCounter
+POST http://p4.fr/billets/jsonPostUpdateCounter
 Content-Type: application/json
 
 {

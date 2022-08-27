@@ -1,2 +1,2 @@
-GET http://projet4/billets/jsonGetBillet/7
+GET http://p4.fr/billets/jsonGetBillet/7
 Content-Type: application/json
