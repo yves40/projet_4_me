@@ -1,0 +1,2 @@
+GET http://projet4/billets/jsonGetMyAdvice/34/1
+Content-Type: application/json

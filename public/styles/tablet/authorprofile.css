@@ -1,0 +1,35 @@
+#auteur
+{
+    padding: 0px;
+}
+
+.full-bio
+{
+    background: url(/images/alaska4.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.box
+{
+    width: 400px;
+    min-height: 400px;
+}
+
+.displayed_bio
+{
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1.4rem;
+    width: 80%;
+    background: rgba(0,0,0,0.4);
+    color: var(--pclr);
+    transform: translateY(0px);
+}
