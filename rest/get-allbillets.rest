@@ -1,0 +1,2 @@
+GET http://p4.fr/admin/jsonAdminBillets/
+Content-Type: application/json

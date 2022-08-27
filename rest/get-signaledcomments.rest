@@ -1,0 +1,2 @@
+GET http://p4.fr/admin/jsonGetSignaledComments/
+Content-Type: application/json
