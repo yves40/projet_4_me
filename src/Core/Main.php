@@ -37,9 +37,9 @@ class Main
     {       
         // http://nom-du-site.projet/controleur/methode/paramètres
         // on veut :
-        // ex: http://projet4/billets/chapitre/paragraphe
+        // ex: http://p4.fr/billets/chapitre/paragraphe
         // on utilisera
-        // http://projet4/index.php?p=billets/chapitre/a
+        // http://p4.fr/index.php?p=billets/chapitre/a
         // La règle de réécriture (htaccess) permet de recevoir dans un paramètre p ce que contient $_GET
         
         // On retire le "trailing slash" éventuel de l'URL
