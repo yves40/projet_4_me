@@ -11,6 +11,13 @@ use PDOException;
 class CommentsDB extends Db
 {
     
+    public const  COMMENT_REJECTED = 10;
+    public const  COMMENT_SIGNALED = 20;
+    public const  COMMENT_VISIBLE = 30;
+    public const  COMMENT_ACCEPTED = 40;
+
+    private $default = CommentsDB::COMMENT_VISIBLE;
+
     private Logger $logger;
 
     public function __construct()
@@ -53,8 +60,11 @@ class CommentsDB extends Db
         {   
             $this->db = Db::getInstance();
 
-            $statement = $this->db->prepare('SELECT content, publish_at, users_id, pseudo, c.id, c.report, DATE_FORMAT(publish_at, "%W %d %M, %H:%i") formatted_date FROM comments c, users u 
-                                            WHERE billet_id = :billetID AND users_id = u.id AND report >= 30 ORDER BY formatted_date DESC');
+            $statement = $this->db->prepare('SELECT content, publish_at, users_id, pseudo, c.id, c.report, 
+                                                    DATE_FORMAT(publish_at, "%W %d %M, %H:%i") formatted_date 
+                                                    FROM comments c, users u 
+                                                        WHERE billet_id = :billetID AND users_id = u.id AND report >= 30 
+                                                        ORDER BY formatted_date DESC');
             
             $statement->bindValue(':billetID', $billetID);
             $statement->execute();
@@ -73,20 +83,26 @@ class CommentsDB extends Db
         }
     }
 
-    public function getSignaledComments()
+    public function getSignaledComments($fetchflag = false)
     {
         try
         {
             $this->db = Db::getInstance();
-
-            $statement = $this->db->prepare('SELECT content, c.publish_at, c.users_id, c.id, pseudo, billet_id, title, DATE_FORMAT(c.publish_at, "%W %d %M, %H:%i") formatted_date 
-                                             FROM comments c, users u, billets b 
-                                             WHERE c.users_id = u.id AND c.billet_id = b.id AND c.report = 20 
-                                             ORDER BY c.publish_at DESC;');
+            $statement = $this->db->prepare('SELECT content, c.publish_at, c.users_id, c.id, pseudo, billet_id, 
+                                                            title, DATE_FORMAT(c.publish_at, "%W %d %M, %H:%i") formatted_date 
+                                                FROM comments c, users u, billets b 
+                                                WHERE c.users_id = u.id 
+                                                        AND c.billet_id = b.id 
+                                                        AND c.report = ' . CommentsDB::COMMENT_SIGNALED . 
+                                                        ' ORDER BY c.publish_at DESC;');
                         
             $statement->execute();
-            $result = $statement->fetchAll();
-
+            if($fetchflag) {
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else {
+                $result = $statement->fetchAll();
+            }
             if(!empty($result))
             {
                 return $result;
@@ -96,7 +112,7 @@ class CommentsDB extends Db
         catch(PDOException $e)
         {
             $this->logger->console($e->getMessage());
-            return false;
+            return array();
         }
     }
 
@@ -105,9 +121,7 @@ class CommentsDB extends Db
         try
         {
             $this->db = Db::getInstance();
-            $statement = $this->db->prepare('UPDATE comments SET report = 20 
-                                             WHERE id = :id');
-
+            $statement = $this->db->prepare('UPDATE comments SET report = '. CommentsDB::COMMENT_SIGNALED .' WHERE id = :id');
             $statement->bindValue(':id', $id);
             return $statement->execute();
         }
@@ -123,8 +137,7 @@ class CommentsDB extends Db
         try
         {
             $this->db = Db::getInstance();
-            $statement = $this->db->prepare('UPDATE comments SET report = 40 
-                                             WHERE id = :id');
+            $statement = $this->db->prepare('UPDATE comments SET report = ' . CommentsDB::COMMENT_ACCEPTED . ' WHERE id = :id');
 
             $statement->bindValue(':id', $id);
             return $statement->execute();
@@ -141,8 +154,7 @@ class CommentsDB extends Db
         try
         {
             $this->db = Db::getInstance();
-            $statement = $this->db->prepare('UPDATE comments SET report = 10 
-                                             WHERE id = :id');
+            $statement = $this->db->prepare('UPDATE comments SET report = '. CommentsDB::COMMENT_REJECTED .' WHERE id = :id');
 
             $statement->bindValue(':id', $id);
             return $statement->execute();
