@@ -28,8 +28,8 @@ class MailTrap extends Mail
     $this->phpmailer->Host = 'smtp.mailtrap.io';
     $this->phpmailer->SMTPAuth = true;
     $this->phpmailer->Port = 2525;
-    $this->phpmailer->Username = '8173ffa6d214ac';
-    $this->phpmailer->Password = '7267baab0b8650';
+    $this->phpmailer->Username = '5ec85f3ec74894';
+    $this->phpmailer->Password = '2a90465b0d3f31';
 
     $this->phpmailer->setFrom($this->from);
     $this->phpmailer->isHTML(true);
