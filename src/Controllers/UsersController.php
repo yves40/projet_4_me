@@ -216,7 +216,33 @@ class UsersController extends Controller
         }
         $this->render('users/profil', 'php', 'defaultLogin', ['loggedUser'=>$user, 'updateUser' => $validator]);
     }
+    // --------------------------------------------------------------------------------
+    // Password reset for TONO
+    // --------------------------------------------------------------------------------
+    public function resetrequest() {
+        $request = new Request;
+        $logger = new Logger(Users::class);
+        $user = Main::$main->getUsersModel();
+        $validator = new UsersValidator();
 
+        if($request->isPost())
+        {
+            $body = $request->getBody();
+            // On appelle ton validateur en lui passant les données
+            $errorList = $validator->checkPasswordResetRequest($body);
+            if(!$validator->hasError())
+            {
+                $logger->console('Sending the password reset email to user');
+            }
+            else {
+                $this->render('users/passwordresetrequest', 'php', 'defaultLogin', ['loggedUser'=>$user, 'errorHandler' => $validator]);
+            }
+        }
+        else {
+            $this->render('users/passwordresetrequest', 'php', 'defaultLogin', ['loggedUser'=>$user, 'errorHandler' => $validator]);
+        }
+
+    }
     public function registerconfirmed() 
     {
         $logger = new Logger(__CLASS__);
