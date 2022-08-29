@@ -84,8 +84,8 @@ class ResetDB extends Db
         $this->userpseudo = $record->pseudo;
         // Expired request ?? 
         $currentdate = date("U");
-        $logger->db($currentdate);
-        $logger->db($record->expires);
+        $logger->db('Current date     :' . $currentdate);
+        $logger->db('Expiration date  :' . $record->expires);
         if($currentdate <= $record->expires) 
         { 
           $this->update(self::STATUS_PROCESSED);

@@ -25,9 +25,5 @@ SELECT content, c.publish_at, c.users_id, pseudo, billet_id, title FROM comments
 
 SELECT COUNT(*) FROM users WHERE STATUS = 20
 
-INSERT INTO `billets` (`title`, `abstract`, `chapter`, `publish_at`, `published`, `users_id`, `thumbs_up`, `thumbs_down`, `chapter_picture`) VALUES
-('E3', 'pour le fun', 'bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla ', '2022-08-18 18:54:00', 1, 37, 0, 0, '64c7bee3bd68682341946cb8864d1ca1.jpg');
-INSERT INTO `billets` (`title`, `abstract`, `chapter`, `publish_at`, `published`, `users_id`, `thumbs_up`, `thumbs_down`, `chapter_picture`) VALUES
-('E4', 'pour le fun', 'bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla ', '2022-08-18 18:54:00', 1, 37, 0, 0, '64c7bee3bd68682341946cb8864d1ca1.jpg');
-INSERT INTO `billets` (`title`, `abstract`, `chapter`, `publish_at`, `published`, `users_id`, `thumbs_up`, `thumbs_down`, `chapter_picture`) VALUES
-('E5', 'pour le fun', 'bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla ', '2022-08-18 18:54:00', 1, 37, 0, 0, '64c7bee3bd68682341946cb8864d1ca1.jpg');
+select logmessage, logtime from projet4.logs where logtime > (now() - interval 2 day )order by logtime desc;
+select logmessage, logtime from projet4.logs where logtime > (now() - interval 2 hour )order by logtime desc;
