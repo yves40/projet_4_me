@@ -60,11 +60,8 @@ class CommentsDB extends Db
         {   
             $this->db = Db::getInstance();
 
-            $statement = $this->db->prepare('SELECT content, publish_at, users_id, pseudo, c.id, c.report, 
-                                                    DATE_FORMAT(publish_at, "%W %d %M, %H:%i") formatted_date 
-                                                    FROM comments c, users u 
-                                                        WHERE billet_id = :billetID AND users_id = u.id AND report >= 30 
-                                                        ORDER BY formatted_date DESC');
+            $statement = $this->db->prepare('SELECT content, publish_at, users_id, pseudo, c.id, c.report, DATE_FORMAT(publish_at, "%W %d %m, %H:%i") formatted_date FROM comments c, users u 
+                                            WHERE billet_id = :billetID AND users_id = u.id AND report >= 30 ORDER BY formatted_date DESC');
             
             $statement->bindValue(':billetID', $billetID);
             $statement->execute();
@@ -72,7 +69,7 @@ class CommentsDB extends Db
 
             if(!empty($result))
             {
-                return $result;
+                return $this->dateConverter($result);
             }
             return array();
         }
@@ -88,24 +85,20 @@ class CommentsDB extends Db
         try
         {
             $this->db = Db::getInstance();
-            $statement = $this->db->prepare('SELECT content, c.publish_at, c.users_id, c.id, pseudo, billet_id, 
-                                                            title, DATE_FORMAT(c.publish_at, "%W %d %M, %H:%i") formatted_date 
-                                                FROM comments c, users u, billets b 
+
+            $statement = $this->db->prepare('SELECT content, c.publish_at, c.users_id, c.id, pseudo, billet_id, title, DATE_FORMAT(c.publish_at, "%W %d %m, %H:%i") formatted_date 
+                                             FROM comments c, users u, billets b 
                                                 WHERE c.users_id = u.id 
                                                         AND c.billet_id = b.id 
                                                         AND c.report = ' . CommentsDB::COMMENT_SIGNALED . 
                                                         ' ORDER BY c.publish_at DESC;');
                         
             $statement->execute();
-            if($fetchflag) {
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-            }
-            else {
-                $result = $statement->fetchAll();
-            }
+            $result = $statement->fetchAll();
+
             if(!empty($result))
             {
-                return $result;
+                return $this->dateConverter($result);
             }
             return array();
         }
@@ -114,6 +107,20 @@ class CommentsDB extends Db
             $this->logger->console($e->getMessage());
             return array();
         }
+    }
+
+    /**Use to fix date format behaviour with PDO*/
+    public function dateConverter($data)
+    {
+        $french_months = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
+        foreach($data as $key => $value)
+        {
+            $elements = explode(" ", $value->formatted_date);
+            $i = intval($elements[2]) - 1;
+            $elements[2] = $french_months[$i];
+            $data[$key]->formatted_date = implode(" ", $elements);
+        }
+        return $data;
     }
 
     public function signalComment($id)
